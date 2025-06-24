@@ -1,0 +1,9 @@
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+plugins/
+*.sln
+.vscode/
+.vs/
+*.log
