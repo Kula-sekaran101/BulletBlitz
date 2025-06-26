@@ -18,6 +18,8 @@ public:
 	UTexture2D* CrosshairsBottom;
 	float CrosshairSpread;
 	FLinearColor CrosshairColour;
+
+	
 };
 /**
  * 
@@ -34,6 +36,9 @@ public:
 	TSubclassOf<class UUserWidget> CharacterOverlayClass;
 
 	class UCharacterOverlay* CharacterOverlay;
+
+	
+
 
 protected:
 	virtual void BeginPlay() override;

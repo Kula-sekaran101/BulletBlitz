@@ -71,12 +71,15 @@ void ABulletBlitzCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 void ABulletBlitzCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	BulletBlitzPlayerController = Cast<ABulletBlitzPlayerController>(Controller);
 
-	if (BulletBlitzPlayerController)
+	UpdateHUDHealth();
+
+	if (HasAuthority())
 	{
-		BulletBlitzPlayerController->SetHUDHealth(Health, MaxHealth);
+		OnTakeAnyDamage.AddDynamic(this, &ABulletBlitzCharacter::ReceiveDamage);
 	}
+
+	
 }
 
 void ABulletBlitzCharacter::Tick(float DeltaTime)
@@ -226,10 +229,7 @@ void ABulletBlitzCharacter::Jump()
 	else Super::Jump();
 }
 
-void ABulletBlitzCharacter::MulticastHit_Implementation()
-{
-	PlayHitReactMontage();
-}
+
 
 void ABulletBlitzCharacter::HideCameraIfCharacterClose()
 {
@@ -254,6 +254,24 @@ void ABulletBlitzCharacter::HideCameraIfCharacterClose()
 
 void ABulletBlitzCharacter::OnRep_Health()
 {
+	PlayHitReactMontage();
+	UpdateHUDHealth();
+}
+
+
+void ABulletBlitzCharacter::UpdateHUDHealth()
+{
+
+	if (BulletBlitzPlayerController == nullptr)
+	{
+		BulletBlitzPlayerController = Cast<ABulletBlitzPlayerController>(Controller);
+	}
+
+	if (BulletBlitzPlayerController)
+	{
+		BulletBlitzPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+
 
 }
 
@@ -371,6 +389,16 @@ void ABulletBlitzCharacter::TurnInPlace(float DeltaTime)
 		}
 	}
 }
+
+void ABulletBlitzCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
+{
+	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
+	
+	PlayHitReactMontage();
+	UpdateHUDHealth();
+}
+
+
 
 
 

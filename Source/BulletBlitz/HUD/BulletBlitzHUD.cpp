@@ -4,6 +4,9 @@
 #include "BulletBlitzHUD.h"
 #include "GameFramework/PlayerController.h"
 #include "CharacterOverlay.h"
+#include <BulletBlitz/Character/BulletBlitzCharacter.h>
+
+
 
 
 void ABulletBlitzHUD::BeginPlay()

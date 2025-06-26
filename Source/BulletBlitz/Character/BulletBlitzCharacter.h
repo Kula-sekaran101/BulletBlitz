@@ -18,20 +18,17 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 	virtual void Jump() override;
+	virtual void MoveForward(float Value);
+	virtual void MoveRight(float Value);
+	virtual void Turn(float Value);
+	virtual void LookUp(float Value);
 	void PlayFireMontage(bool bAiming);
 
 
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastHit();
 
 protected:
 	virtual void BeginPlay() override;
 
-	// Input functions
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	void Turn(float Value);
-	void LookUp(float Value);
 	void EquipButtonPressed();
 	void CrouchButtonPressed();
 	void AimButtonPressed();
@@ -41,9 +38,15 @@ protected:
 	void PlayHitReactMontage();
 
 
+
 	// Aim offset + turning
 	void AimOffset(float DeltaTime);
 	void TurnInPlace(float DeltaTime);
+
+	//Damage and Health
+	UFUNCTION()
+	void ReceiveDamage( AActor* DamagedActor , float Damage , const UDamageType* DamageType , class AController* InstigatorController , AActor* DamageCauser);
+	void UpdateHUDHealth();
 
 private:
 	/** Camera boom positioning the camera behind the character */
