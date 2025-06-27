@@ -24,8 +24,10 @@ void ABulletBlitzPlayerController::SetHUDHealth(float Health, float MaxHealth)
 		BulletBlitzHUD = Cast<ABulletBlitzHUD>(GetHUD());
     }
 
-	if (BulletBlitzHUD && BulletBlitzHUD->CharacterOverlay && BulletBlitzHUD->CharacterOverlay->HealthBar, BulletBlitzHUD->CharacterOverlay->HealthText)
+	if (BulletBlitzHUD && BulletBlitzHUD->CharacterOverlay && BulletBlitzHUD->CharacterOverlay->HealthBar && BulletBlitzHUD->CharacterOverlay->HealthText)
 	{
+
+	
 		const float HealthPercent = Health / MaxHealth;
 		FString HealthText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Health), FMath::CeilToInt(MaxHealth));
 		BulletBlitzHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);

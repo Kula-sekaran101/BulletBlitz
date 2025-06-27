@@ -73,7 +73,6 @@ void ABulletBlitzCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	UpdateHUDHealth();
-
 	if (HasAuthority())
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ABulletBlitzCharacter::ReceiveDamage);
@@ -252,28 +251,7 @@ void ABulletBlitzCharacter::HideCameraIfCharacterClose()
 		}
 }
 
-void ABulletBlitzCharacter::OnRep_Health()
-{
-	PlayHitReactMontage();
-	UpdateHUDHealth();
-}
 
-
-void ABulletBlitzCharacter::UpdateHUDHealth()
-{
-
-	if (BulletBlitzPlayerController == nullptr)
-	{
-		BulletBlitzPlayerController = Cast<ABulletBlitzPlayerController>(Controller);
-	}
-
-	if (BulletBlitzPlayerController)
-	{
-		BulletBlitzPlayerController->SetHUDHealth(Health, MaxHealth);
-	}
-
-
-}
 
 void ABulletBlitzCharacter::SetOverlappingWeapon(AWeapons* Weapon)
 {
@@ -390,17 +368,48 @@ void ABulletBlitzCharacter::TurnInPlace(float DeltaTime)
 	}
 }
 
+//void ABulletBlitzCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
+//{
+//	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
+//	
+//
+//	if (GEngine) {
+//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Health: %f"), Health));
+//	}
+//	
+//	PlayHitReactMontage();
+//	UpdateHUDHealth();
+//}
+
+
 void ABulletBlitzCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
 {
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
-	
-	PlayHitReactMontage();
 	UpdateHUDHealth();
+	PlayHitReactMontage();
+
 }
 
 
+void ABulletBlitzCharacter::OnRep_Health()
+{
+	UpdateHUDHealth();
+	PlayHitReactMontage();
+	
+	
+}
 
 
+void ABulletBlitzCharacter::UpdateHUDHealth()
+{
+
+	BulletBlitzPlayerController = BulletBlitzPlayerController == nullptr ? Cast<ABulletBlitzPlayerController>(Controller) : BulletBlitzPlayerController;
+	if (BulletBlitzPlayerController)
+	{
+		BulletBlitzPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+
+}
 
 bool ABulletBlitzCharacter::IsWeaponEquipped()
 {
