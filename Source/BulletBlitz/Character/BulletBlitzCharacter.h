@@ -23,6 +23,12 @@ public:
 	virtual void Turn(float Value);
 	virtual void LookUp(float Value);
 	void PlayFireMontage(bool bAiming);
+	void PlayElimMontage();
+
+	UFUNCTION(NetMulticast ,Reliable)
+	void MulticastElim();
+
+	void Elim();
 
 
 
@@ -92,7 +98,23 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	class UAnimMontage* HitReactMontage;
 
-	
+
+	//Elimination
+	UPROPERTY(EditAnywhere, Category = Combat)
+	class UAnimMontage* ElimMontage;
+
+	bool bElimed = false;
+
+	//Respawn Timer
+
+	FTimerHandle ElimTimer;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ElimDelay = 3.f;
+
+	void ElimTimerFinished();
+
+
 
 	void HideCameraIfCharacterClose();
 
@@ -124,4 +146,5 @@ public:
 
 	FVector GetHitTarget() const;
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE bool bIsElimed() const { return bElimed;}
 };

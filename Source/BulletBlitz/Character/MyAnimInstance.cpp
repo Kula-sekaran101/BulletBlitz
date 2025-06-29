@@ -33,6 +33,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaTime)
     bIsInAir = BulletBlitzCharacter->GetCharacterMovement()->IsFalling();
     bIsAccelerating = BulletBlitzCharacter->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0.f ? true : false;
     bWeaponEquipped = BulletBlitzCharacter->IsWeaponEquipped();
+    bElimed = BulletBlitzCharacter->bIsElimed();
 
     class AWeapons* EquippedWeapon;
     EquippedWeapon = BulletBlitzCharacter->GetEquippedWeapon();

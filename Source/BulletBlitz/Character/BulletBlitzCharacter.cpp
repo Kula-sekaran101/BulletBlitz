@@ -10,6 +10,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "MyAnimInstance.h"
 #include "BulletBlitz/PlayerController/BulletBlitzPlayerController.h"
+#include "BulletBlitz/GameMode/BulletBlitzGameMode.h"
+#include "TimerManager.h"
 
 
 ABulletBlitzCharacter::ABulletBlitzCharacter()
@@ -230,6 +232,8 @@ void ABulletBlitzCharacter::Jump()
 
 
 
+
+
 void ABulletBlitzCharacter::HideCameraIfCharacterClose()
 {
 	if (!IsLocallyControlled()) return;
@@ -290,6 +294,41 @@ void ABulletBlitzCharacter::PlayFireMontage(bool bAiming)
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
+
+void ABulletBlitzCharacter::PlayElimMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ElimMontage)
+	{
+		AnimInstance->Montage_Play(ElimMontage);
+	}
+
+}
+
+void ABulletBlitzCharacter::Elim()
+{
+	MulticastElim();
+	GetWorldTimerManager().SetTimer(
+		ElimTimer,
+		this,
+		ABulletBlitzCharacter::ElimTimerFinished,
+		ElimDelay
+	);
+}
+
+void ABulletBlitzCharacter::MulticastElim_Implementation()
+{
+	bElimed = true;
+	PlayElimMontage();
+}
+
+
+void ABulletBlitzCharacter::ElimTimerFinished()
+{
+
+}
+
+
 
 void ABulletBlitzCharacter::PlayHitReactMontage()
 {
@@ -388,6 +427,17 @@ void ABulletBlitzCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, co
 	UpdateHUDHealth();
 	PlayHitReactMontage();
 
+	if (Health == 0.f)
+	{
+		ABulletBlitzGameMode* BulletBlitzGameMode = GetWorld()->GetAuthGameMode<ABulletBlitzGameMode>();
+		if (BulletBlitzGameMode)
+		{
+			BulletBlitzPlayerController = BulletBlitzPlayerController == nullptr ? Cast<ABulletBlitzPlayerController>(Controller) : BulletBlitzPlayerController;
+			ABulletBlitzPlayerController* AttackerController = Cast<ABulletBlitzPlayerController>(InstigatorController);
+			BulletBlitzGameMode->PlayerEliminated(this, BulletBlitzPlayerController, AttackerController);
+		}
+	}
+
 }
 
 
@@ -396,7 +446,7 @@ void ABulletBlitzCharacter::OnRep_Health()
 	UpdateHUDHealth();
 	PlayHitReactMontage();
 	
-	
+
 }
 
 
