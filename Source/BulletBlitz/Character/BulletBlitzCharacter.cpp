@@ -364,6 +364,7 @@ void ABulletBlitzCharacter::AimOffset(float DeltaTime)
 			InterpAO_Yaw = AO_Yaw;
 		}
 
+
 		bUseControllerRotationYaw = true;
 		TurnInPlace(DeltaTime);
 	}
