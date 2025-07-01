@@ -409,19 +409,6 @@ void ABulletBlitzCharacter::TurnInPlace(float DeltaTime)
 	}
 }
 
-//void ABulletBlitzCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
-//{
-//	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
-//	
-//
-//	if (GEngine) {
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Health: %f"), Health));
-//	}
-//	
-//	PlayHitReactMontage();
-//	UpdateHUDHealth();
-//}
-
 
 void ABulletBlitzCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
 {
