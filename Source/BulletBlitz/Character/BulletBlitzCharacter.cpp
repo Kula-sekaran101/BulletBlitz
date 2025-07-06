@@ -12,6 +12,9 @@
 #include "BulletBlitz/PlayerController/BulletBlitzPlayerController.h"
 #include "BulletBlitz/GameMode/BulletBlitzGameMode.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
 ABulletBlitzCharacter::ABulletBlitzCharacter()
@@ -329,6 +332,18 @@ void ABulletBlitzCharacter::PlayElimMontage()
 
 }
 
+void ABulletBlitzCharacter::Destroyed()
+{
+	Super::Destroyed();
+
+	if (ElimBotEffectComponent)
+	{
+		ElimBotEffectComponent->DestroyComponent();
+
+	}
+
+}
+
 void ABulletBlitzCharacter::Elim()
 {
 	if (Combat && Combat->EquippedWeapon)
@@ -369,6 +384,31 @@ void ABulletBlitzCharacter::MulticastElim_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+
+	//spawning Elimbot
+
+	if (ElimBotEffect) 
+	{
+		FVector ElimBotSpawnPoint(
+			GetActorLocation().X,
+			GetActorLocation().Y,
+			GetActorLocation().Z + 200.f
+		);
+		ElimBotEffectComponent = UGameplayStatics::SpawnEmitterAtLocation(
+			GetWorld(),
+			ElimBotEffect,
+			ElimBotSpawnPoint,
+			GetActorRotation()
+		);
+	}
+	if (ElimBotSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			ElimBotSound,
+			GetActorLocation()
+		);
+	}
 }
 
 
@@ -379,7 +419,7 @@ void ABulletBlitzCharacter::ElimTimerFinished()
 	{
 		BulletBlitzGameMode->RequestRespawn(this, Controller);
 	}
-
+	
 }
 
 

@@ -31,6 +31,8 @@ public:
 	UFUNCTION(NetMulticast ,Reliable)
 	void MulticastElim();
 
+	virtual void Destroyed() override;
+
 	void Elim();
 
 
@@ -138,6 +140,18 @@ private:
 	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
 	UPROPERTY(EditAnywhere)
 	UMaterialInstance* DissolveMaterialInstance;
+
+
+	//Elim bot
+
+	UPROPERTY(EditAnywhere, Category = "Elim Bot")
+	UParticleSystem* ElimBotEffect;
+
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ElimBotEffectComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Elim Bot")
+	class USoundCue* ElimBotSound;
 
 
 	// Camera Visibility
