@@ -331,6 +331,10 @@ void ABulletBlitzCharacter::PlayElimMontage()
 
 void ABulletBlitzCharacter::Elim()
 {
+	if (Combat && Combat->EquippedWeapon)
+	{
+		Combat->EquippedWeapon->dropped();
+	}
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(
 		ElimTimer,

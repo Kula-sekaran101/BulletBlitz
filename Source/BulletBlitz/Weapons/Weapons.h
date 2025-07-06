@@ -82,6 +82,7 @@ public:
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& Hittarget);
 	void SetWeaponState(EWeaponState State);
+	void dropped();
 
 	FORCEINLINE class USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE class USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
