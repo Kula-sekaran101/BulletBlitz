@@ -4,7 +4,10 @@
 #include "GameFramework/Character.h"
 #include "BulletBlitz/Types/TurningInPlace.h"
 #include "BulletBlitz/Interfaces/InteractWithCrosshairsInterface.h"
+#include "Components/TimelineComponent.h"
 #include "BulletBlitzCharacter.generated.h"
+
+
 
 UCLASS()
 class BULLETBLITZ_API ABulletBlitzCharacter : public ACharacter , public IInteractWithCrosshairsInterface
@@ -115,6 +118,29 @@ private:
 	void ElimTimerFinished();
 
 
+
+	//Dissolve Effect
+
+	UPROPERTY(VisibleAnywhere)
+	UTimelineComponent* DissolveTimeline;
+
+	FOnTimelineFloat DissolveTrack;
+
+	UPROPERTY(EditAnywhere)
+	UCurveFloat* DissolveCurve;
+
+	UFUNCTION()
+	void UpdateDissolveMaterial(float DissolveValue);
+
+	void StartDissolve();
+
+	UPROPERTY(VisibleAnywhere)
+	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
+	UPROPERTY(EditAnywhere)
+	UMaterialInstance* DissolveMaterialInstance;
+
+
+	// Camera Visibility
 
 	void HideCameraIfCharacterClose();
 

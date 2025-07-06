@@ -60,6 +60,8 @@ ABulletBlitzCharacter::ABulletBlitzCharacter()
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
+
+	DissolveTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("DissolveTimelineComponent"));
 }
 
 void ABulletBlitzCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -234,6 +236,28 @@ void ABulletBlitzCharacter::Jump()
 
 
 
+void ABulletBlitzCharacter::UpdateDissolveMaterial(float DissolveValue)
+{
+	if (DynamicDissolveMaterialInstance)
+	{
+		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), DissolveValue);
+
+	}
+}
+
+
+void ABulletBlitzCharacter::StartDissolve()
+{
+	DissolveTrack.BindDynamic(this, &ABulletBlitzCharacter::UpdateDissolveMaterial);
+	if (DissolveCurve && DissolveTimeline)
+	{
+		DissolveTimeline->AddInterpFloat(DissolveCurve, DissolveTrack);
+		DissolveTimeline->Play();
+	}
+}
+
+
+
 void ABulletBlitzCharacter::HideCameraIfCharacterClose()
 {
 	if (!IsLocallyControlled()) return;
@@ -320,6 +344,16 @@ void ABulletBlitzCharacter::MulticastElim_Implementation()
 {
 	bElimed = true;
 	PlayElimMontage();
+
+	if (DissolveMaterialInstance) 
+	{
+		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance);
+		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), 0.55f);
+		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Glow"), 20.f);
+	}
+
+	StartDissolve();
 }
 
 
