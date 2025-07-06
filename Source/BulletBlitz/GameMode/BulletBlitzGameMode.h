@@ -16,5 +16,5 @@ class BULLETBLITZ_API ABulletBlitzGameMode : public AGameMode
 	GENERATED_BODY()
 public:
 	void PlayerEliminated(class ABulletBlitzCharacter* ElimedCharacter , class ABulletBlitzPlayerController* VictimController, class ABulletBlitzPlayerController* AttackerController);
-	
+	virtual void RequestRespawn(class ACharacter* ElimedCharacter,  AController* ElimmedControlle);
 };

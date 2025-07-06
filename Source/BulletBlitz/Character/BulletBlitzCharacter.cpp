@@ -311,7 +311,7 @@ void ABulletBlitzCharacter::Elim()
 	GetWorldTimerManager().SetTimer(
 		ElimTimer,
 		this,
-		ABulletBlitzCharacter::ElimTimerFinished,
+		&ABulletBlitzCharacter::ElimTimerFinished,
 		ElimDelay
 	);
 }
@@ -325,7 +325,11 @@ void ABulletBlitzCharacter::MulticastElim_Implementation()
 
 void ABulletBlitzCharacter::ElimTimerFinished()
 {
-
+	ABulletBlitzGameMode* BulletBlitzGameMode = GetWorld()->GetAuthGameMode<ABulletBlitzGameMode>();
+	if (BulletBlitzGameMode)
+	{
+		BulletBlitzGameMode->RequestRespawn(this, Controller);
+	}
 
 }
 
