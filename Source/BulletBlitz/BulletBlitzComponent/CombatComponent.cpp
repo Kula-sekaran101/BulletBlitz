@@ -24,7 +24,7 @@ UCombatComponent::UCombatComponent()
 void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
+    
     DOREPLIFETIME(UCombatComponent, EquippedWeapon);
     DOREPLIFETIME(UCombatComponent, bAiming);
 }

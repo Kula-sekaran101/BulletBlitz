@@ -354,6 +354,17 @@ void ABulletBlitzCharacter::MulticastElim_Implementation()
 	}
 
 	StartDissolve();
+
+	GetCharacterMovement()->DisableMovement();
+	GetCharacterMovement()->StopMovementImmediately();
+	if (BulletBlitzPlayerController)
+	{
+		DisableInput(BulletBlitzPlayerController);
+	}
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 }
 
 
