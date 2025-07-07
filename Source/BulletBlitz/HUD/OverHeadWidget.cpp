@@ -3,11 +3,13 @@
 
 #include "OverHeadWidget.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/PlayerState.h"
 
 void UOverHeadWidget::SetUpDisplayText(FString TextToDisplay)
 {
-	if (DisplayText) {
-		DisplayText->SetText(FText::FromString(TextToDisplay));
+	if (DisplayText)
+	{
+			DisplayText->SetText(FText::FromString(TextToDisplay));
 	}
 }
 
@@ -32,7 +34,19 @@ void UOverHeadWidget::ShowPlayerNetRole(APawn* InPawn)
 		break;
 	}
 	FString LocalRoalString = FString::Printf(TEXT("Local Role: %s"), *Role);
-	SetUpDisplayText(LocalRoalString);
+	//SetUpDisplayText(LocalRoalString);
+}
+
+void UOverHeadWidget::ShowPlayerName(APawn* InPawn)
+{
+	if (InPawn == nullptr) return;
+
+	APlayerState* PlayerState = InPawn->GetPlayerState();
+	if (PlayerState)
+	{
+	      PlayerName = PlayerState->GetPlayerName();
+	}
+	SetUpDisplayText(PlayerName);
 }
 
 void UOverHeadWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
