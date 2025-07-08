@@ -6,7 +6,7 @@
 #include "BulletBlitz/HUD/CharacterOverlay.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-
+#include "BulletBlitz/Character/BulletBlitzCharacter.h"	
 
 
 void ABulletBlitzPlayerController::BeginPlay()
@@ -31,4 +31,15 @@ void ABulletBlitzPlayerController::SetHUDHealth(float Health, float MaxHealth)
 		BulletBlitzHUD->CharacterOverlay->HealthBar->SetPercent(HealthPercent);
 		BulletBlitzHUD->CharacterOverlay->HealthText->SetText(FText::FromString(HealthText));
 	}
+}
+
+void ABulletBlitzPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	ABulletBlitzCharacter* BulletBlitzCharacter = Cast<ABulletBlitzCharacter>(InPawn);
+	if (BulletBlitzCharacter)
+	{
+		SetHUDHealth(BulletBlitzCharacter->GetHealth(), BulletBlitzCharacter->GetMaxHealth());
+	}
+
 }

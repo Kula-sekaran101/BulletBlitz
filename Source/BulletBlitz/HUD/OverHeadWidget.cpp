@@ -9,7 +9,7 @@ void UOverHeadWidget::SetUpDisplayText(FString TextToDisplay)
 {
 	if (DisplayText)
 	{
-			DisplayText->SetText(FText::FromString(TextToDisplay));
+	  DisplayText->SetText(FText::FromString(TextToDisplay));
 	}
 }
 
@@ -48,6 +48,7 @@ void UOverHeadWidget::ShowPlayerName(APawn* InPawn)
 	}
 	SetUpDisplayText(PlayerName);
 }
+
 
 void UOverHeadWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
 {
