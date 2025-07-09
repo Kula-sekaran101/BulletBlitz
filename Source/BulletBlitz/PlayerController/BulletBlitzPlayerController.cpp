@@ -33,6 +33,19 @@ void ABulletBlitzPlayerController::SetHUDHealth(float Health, float MaxHealth)
 	}
 }
 
+void ABulletBlitzPlayerController::SetHUDScore(float Score)
+{
+	if (BulletBlitzHUD == nullptr)
+	{
+		BulletBlitzHUD = Cast<ABulletBlitzHUD>(GetHUD());
+	}
+	if (BulletBlitzHUD && BulletBlitzHUD->CharacterOverlay && BulletBlitzHUD->CharacterOverlay->ScoreAmount)
+	{
+		FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
+		BulletBlitzHUD->CharacterOverlay->ScoreAmount->SetText(FText::FromString(ScoreText));
+	}
+}
+
 void ABulletBlitzPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
