@@ -65,7 +65,8 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 {
 	
 	MultiCastImpactEffects();
-	Destroy();
+	SetLifeSpan(1.f); // Destroy the projectile after 1 seconds
+	//Destroy();
 }
 
 void AProjectile::MultiCastImpactEffects_Implementation()

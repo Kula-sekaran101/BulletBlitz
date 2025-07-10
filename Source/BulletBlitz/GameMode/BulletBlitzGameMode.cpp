@@ -6,9 +6,18 @@
 #include <BulletBlitz/BulletBlitzComponent/CombatComponent.h>
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
+#include <BulletBlitz/PlayerState/BulletBlitzPlayerState.h>
+#include "BulletBlitz/PlayerController/BulletBlitzPlayerController.h"  
 
 void ABulletBlitzGameMode::PlayerEliminated(ABulletBlitzCharacter* ElimedCharacter, ABulletBlitzPlayerController* VictimController, ABulletBlitzPlayerController* AttackerController)
 {
+	ABulletBlitzPlayerState* AttackerPlayerState = AttackerController ? Cast<ABulletBlitzPlayerState>(AttackerController->PlayerState) : nullptr;
+	ABulletBlitzPlayerState* VictimPlayerState = VictimController ? Cast<ABulletBlitzPlayerState>(VictimController->PlayerState) : nullptr;
+
+	if (AttackerPlayerState && VictimPlayerState && AttackerPlayerState != VictimPlayerState)
+	{
+		AttackerPlayerState->AddToScore(1.f);
+	}
 	if (ElimedCharacter)
 	{
 		ElimedCharacter->Elim();
