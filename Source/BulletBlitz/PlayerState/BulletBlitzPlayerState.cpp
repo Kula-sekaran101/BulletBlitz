@@ -1,63 +1,42 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
 #include "BulletBlitzPlayerState.h"
 #include "BulletBlitz/Character/BulletBlitzCharacter.h"
 #include "BulletBlitz/PlayerController/BulletBlitzPlayerController.h"
-#include "TimerManager.h"
-#include "GameFramework/PlayerController.h"
+
+
 
 void ABulletBlitzPlayerState::AddToScore(float ScoreAmount)
 {
 	Score += ScoreAmount;
-
-	if (!Character)
-	{
-		Character = Cast<ABulletBlitzCharacter>(GetPawn());
-	}
-
+	Character = Character == nullptr ? Cast<ABulletBlitzCharacter>(GetPawn()) : Character;
 	if (Character)
 	{
-		if (!Controller)
-		{
-			Controller = Cast<ABulletBlitzPlayerController>(Character->GetController());
-		}
-
+		Controller = Controller == nullptr ? Cast<ABulletBlitzPlayerController>(Character->Controller) : Controller;
 		if (Controller)
 		{
 			Controller->SetHUDScore(Score);
+
 		}
 	}
 }
+
+
 
 void ABulletBlitzPlayerState::OnRep_Score()
 {
 	Super::OnRep_Score();
 
-	if (!Character)
-	{
-		Character = Cast<ABulletBlitzCharacter>(GetPawn());
-	}
-
+	Character = Character == nullptr ? Cast<ABulletBlitzCharacter>(GetPawn()) : Character;
 	if (Character)
 	{
-		// Delay updating HUD in case controller is not yet ready on client
-		FTimerHandle TimerHandle;
-		Character->GetWorldTimerManager().SetTimer(
-			TimerHandle,
-			[this]()
-			{
-				if (!Character) return;
-
-				if (!Controller)
-				{
-					Controller = Cast<ABulletBlitzPlayerController>(Character->GetController());
-				}
-
-				if (Controller)
-				{
-					Controller->SetHUDScore(Score);
-				}
-			},
-			0.1f,  // delay to ensure controller & HUD are initialized
-			false
-		);
+		Controller = Controller == nullptr ? Cast<ABulletBlitzPlayerController>(Character->Controller) : Controller;
+		if (Controller)
+		{
+			Controller->SetHUDScore(Score);
+		}
 	}
+
 }
+
