@@ -114,7 +114,6 @@ void AWeapons::dropped()
 	FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepWorld, true);
     WeaponMesh->DetachFromComponent(DetachmentRules);
 	SetOwner(nullptr);
-
 }
 
 void AWeapons::OnRep_WeaponState()
