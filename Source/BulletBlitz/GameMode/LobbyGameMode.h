@@ -16,5 +16,7 @@ class BULLETBLITZ_API ALobbyGameMode : public AGameMode
 
 public:
 	 void PostLogin(APlayerController* NewPlayer) override;
+	 virtual void BeginPlay() override;
+
 	
 };
