@@ -13,13 +13,7 @@ class BULLETBLITZ_API ALobbyPlayerController : public APlayerController
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
 
-public:
-	// Assign this in the Lobby map (World Settings) or in a BP that derives from this class
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<class UUserWidget> LobbyWidgetClass;
-
-private:
-	UPROPERTY()
-	class UUserWidget* LobbyWidget = nullptr;
+	void StartMatch();
 };
