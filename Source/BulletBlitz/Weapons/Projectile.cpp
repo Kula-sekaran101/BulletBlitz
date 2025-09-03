@@ -33,9 +33,6 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 
-	
-
-
 }
 
 
@@ -63,15 +60,26 @@ void AProjectile::BeginPlay()
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	
+	if (!OtherActor || OtherActor == this || !OtherActor->IsValidLowLevelFast()) return;
+	ABulletBlitzCharacter* HitCharacter = Cast<ABulletBlitzCharacter>(OtherActor);
+	if (HitCharacter && HasAuthority())
+	{
+		UGameplayStatics::ApplyDamage(
+			HitCharacter,
+			Damage,
+			GetInstigatorController(),
+			this,
+			UDamageType::StaticClass()
+		);
+	}
 	MultiCastImpactEffects();
-	SetLifeSpan(0.2f); 
-	//Destroy();
+	//SetLifeSpan(0.2f); 
+	Destroy();
 }
 
 void AProjectile::MultiCastImpactEffects_Implementation()
 {
-	if (ImpactParticles)
+	if (ImpactParticles && IsValid(this))
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(
 			GetWorld(),
