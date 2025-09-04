@@ -12,7 +12,7 @@
 
 AProjectile::AProjectile()
 {
- 	
+
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
@@ -38,48 +38,37 @@ AProjectile::AProjectile()
 
 void AProjectile::BeginPlay()
 {
-    Super::BeginPlay();
+	Super::BeginPlay();
 
-    if (Tracer)
-    {
-        TracerComponent = UGameplayStatics::SpawnEmitterAttached(
-            Tracer,
-            CollisionBox,
-            FName(),                
-            GetActorLocation(),
-            GetActorRotation(),
-            EAttachLocation::KeepWorldPosition
-        );
-    }
+	if (Tracer)
+	{
+		TracerComponent = UGameplayStatics::SpawnEmitterAttached(
+			Tracer,
+			CollisionBox,
+			FName(),
+			GetActorLocation(),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition
+		);
+	}
 
-    if (HasAuthority())
-    {
+	if (HasAuthority())
+	{
 		CollisionBox->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
-    }
+	}
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (!OtherActor || OtherActor == this || !OtherActor->IsValidLowLevelFast()) return;
-	ABulletBlitzCharacter* HitCharacter = Cast<ABulletBlitzCharacter>(OtherActor);
-	if (HitCharacter && HasAuthority())
-	{
-		UGameplayStatics::ApplyDamage(
-			HitCharacter,
-			Damage,
-			GetInstigatorController(),
-			this,
-			UDamageType::StaticClass()
-		);
-	}
+
 	MultiCastImpactEffects();
-	//SetLifeSpan(0.2f); 
-	Destroy();
+	SetLifeSpan(0.2f);
+	//Destroy();
 }
 
 void AProjectile::MultiCastImpactEffects_Implementation()
 {
-	if (ImpactParticles && IsValid(this))
+	if (ImpactParticles)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(
 			GetWorld(),

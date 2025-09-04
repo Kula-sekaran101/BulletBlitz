@@ -10,17 +10,19 @@
 void ABulletBlitzPlayerState::AddToScore(float ScoreAmount)
 {
 	Score += ScoreAmount;
-	Character = Character == nullptr ? Cast<ABulletBlitzCharacter>(GetPawn()) : Character;
-	if (Character)
-	{
-		Controller = Controller == nullptr ? Cast<ABulletBlitzPlayerController>(Character->Controller) : Controller;
-		if (Controller)
-		{
-			Controller->SetHUDScore(Score);
 
-		}
-	}
+	APawn* Pawn = GetPawn();
+	if (!Pawn) return;
+
+	ABulletBlitzCharacter* BlitzChar = Cast<ABulletBlitzCharacter>(Pawn);
+	if (!BlitzChar) return;
+
+	ABulletBlitzPlayerController* BlitzController = Cast<ABulletBlitzPlayerController>(BlitzChar->Controller);
+	if (!BlitzController || !BlitzController->IsLocalController()) return;
+
+	BlitzController->SetHUDScore(Score);
 }
+
 
 
 
@@ -28,15 +30,20 @@ void ABulletBlitzPlayerState::OnRep_Score()
 {
 	Super::OnRep_Score();
 
-	Character = Character == nullptr ? Cast<ABulletBlitzCharacter>(GetPawn()) : Character;
-	if (Character)
-	{
-		Controller = Controller == nullptr ? Cast<ABulletBlitzPlayerController>(Character->Controller) : Controller;
-		if (Controller)
-		{
-			Controller->SetHUDScore(Score);
-		}
-	}
+	
+	APawn* Pawn = GetPawn();
+	if (!Pawn) return; 
 
+	ABulletBlitzCharacter* BlitzChar = Cast<ABulletBlitzCharacter>(Pawn);
+	if (!BlitzChar) return;
+
+	ABulletBlitzPlayerController* BlitzController = Cast<ABulletBlitzPlayerController>(BlitzChar->Controller);
+	if (!BlitzController || !BlitzController->IsLocalController()) return;
+
+
+	BlitzController->SetHUDScore(Score);
 }
+
+
+
 
