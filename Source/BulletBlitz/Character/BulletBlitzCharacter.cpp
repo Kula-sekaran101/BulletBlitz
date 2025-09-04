@@ -84,20 +84,20 @@ void ABulletBlitzCharacter::BeginPlay()
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ABulletBlitzCharacter::ReceiveDamage);
 	}
-
-	
 }
-
 void ABulletBlitzCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimOffset(DeltaTime);
 	HideCameraIfCharacterClose();
-	 
-	if (GetActorLocation().Z < -2000) {
-		Elim();
+
+	if (HasAuthority() && !bElimed)
+	{
+		if (GetActorLocation().Z < -2000.f) {
+			Elim();
+		}
+
 	}
-	
 }
 
 void ABulletBlitzCharacter::PostInitializeComponents()
@@ -532,8 +532,6 @@ void ABulletBlitzCharacter::OnRep_Health()
 {
 	UpdateHUDHealth();
 	PlayHitReactMontage();
-	
-
 }
 
 
