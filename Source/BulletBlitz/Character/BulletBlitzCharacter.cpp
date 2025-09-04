@@ -93,6 +93,11 @@ void ABulletBlitzCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	AimOffset(DeltaTime);
 	HideCameraIfCharacterClose();
+	 
+	if (GetActorLocation().Z < -2000) {
+		Elim();
+	}
+	
 }
 
 void ABulletBlitzCharacter::PostInitializeComponents()
