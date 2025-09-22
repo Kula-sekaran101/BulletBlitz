@@ -316,7 +316,14 @@ void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& T
 
 void UCombatComponent::EquipWeapon(AWeapons* WeaponToEquip)
 {
+
+
     if (Character == nullptr || WeaponToEquip == nullptr) return;
+
+    if (EquippedWeapon != nullptr)
+    {
+        return;
+    }
 
     EquippedWeapon = WeaponToEquip;
     EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
