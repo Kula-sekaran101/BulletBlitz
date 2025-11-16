@@ -11,6 +11,40 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "BulletBlitz/Weapons/Casing.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "BulletBlitz/PlayerController/BulletBlitzPlayerController.h"
+
+void AWeapons::OnRep_Ammo()
+{
+    BulletBlitzOwnerCharacter = BulletBlitzOwnerCharacter == nullptr ? Cast<ABulletBlitzCharacter>(GetOwner()) : BulletBlitzOwnerCharacter;
+	SetHUDAmmo();
+}
+
+void AWeapons::SpendRound()
+{
+    Ammo--;
+    SetHUDAmmo();
+
+}
+
+void AWeapons::OnRep_Owner()
+{
+    Super::OnRep_Owner();
+	SetHUDAmmo();
+   
+}
+void AWeapons::SetHUDAmmo()
+{
+
+    BulletBlitzOwnerCharacter = BulletBlitzOwnerCharacter == nullptr ? Cast<ABulletBlitzCharacter>(GetOwner()) : BulletBlitzOwnerCharacter;
+    if (BulletBlitzOwnerCharacter)
+    {
+        BulletBlitzOwnerController = BulletBlitzOwnerController == nullptr ? Cast<ABulletBlitzPlayerController>(BulletBlitzOwnerCharacter->GetController()) : BulletBlitzOwnerController;
+        if (BulletBlitzOwnerController)
+        {
+            BulletBlitzOwnerController->SetHUDWeaponAmmo(Ammo);
+        }
+    }
+}
 
 AWeapons::AWeapons()
 {
@@ -63,7 +97,10 @@ void AWeapons::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AWeapons, WeaponState);
+	DOREPLIFETIME(AWeapons, Ammo);
 }
+
+
 
 void AWeapons::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -115,6 +152,8 @@ void AWeapons::dropped()
     WeaponMesh->DetachFromComponent(DetachmentRules);
 	SetOwner(nullptr);
 }
+
+
 
 void AWeapons::OnRep_WeaponState()
 {
@@ -168,5 +207,6 @@ void AWeapons::Fire(const FVector& HitTarget)
             }
         }
     }
+	SpendRound();
 }
    

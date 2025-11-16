@@ -46,6 +46,20 @@ void ABulletBlitzPlayerController::SetHUDScore(float Score)
 	}
 }
 
+void ABulletBlitzPlayerController::SetHUDWeaponAmmo(int Ammo)
+{
+	if (BulletBlitzHUD == nullptr)
+	{
+		BulletBlitzHUD = Cast<ABulletBlitzHUD>(GetHUD());
+	}
+	if (BulletBlitzHUD && BulletBlitzHUD->CharacterOverlay && BulletBlitzHUD->CharacterOverlay->AmmoAmount)
+	{
+		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
+		BulletBlitzHUD->CharacterOverlay->AmmoAmount->SetText(FText::FromString(AmmoText));
+	}
+
+}
+
 void ABulletBlitzPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);

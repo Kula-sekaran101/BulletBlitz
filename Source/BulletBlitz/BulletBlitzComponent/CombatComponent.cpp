@@ -335,6 +335,7 @@ void UCombatComponent::EquipWeapon(AWeapons* WeaponToEquip)
     }
 
     EquippedWeapon->SetOwner(Character);
+	EquippedWeapon->SetHUDAmmo();
     Character->GetCharacterMovement()->bOrientRotationToMovement = false;
     Character->bUseControllerRotationYaw = true;
 }

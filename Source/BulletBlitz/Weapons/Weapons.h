@@ -72,17 +72,36 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ZoomInterpSpeed = 20.f;
 
+	UPROPERTY( EditAnywhere, ReplicatedUsing = OnRep_Ammo)
+	int Ammo;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	void SpendRound();
+
+	UPROPERTY(EditAnywhere)
+	int MagCapacity;
+
+	UPROPERTY()
+	class ABulletBlitzCharacter* BulletBlitzOwnerCharacter;
+	UPROPERTY()
+	class ABulletBlitzPlayerController* BulletBlitzOwnerController;
+
 	
 
 public:
 	AWeapons();
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
+	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& Hittarget);
 	void SetWeaponState(EWeaponState State);
 	void dropped();
+
+	void SetHUDAmmo();
+
 
 	FORCEINLINE class USphereComponent* GetAreaSphere() const { return AreaSphere; }
 	FORCEINLINE class USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
